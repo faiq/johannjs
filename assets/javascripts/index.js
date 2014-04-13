@@ -1,19 +1,37 @@
-var prev_accel;
-var prev_x = 0;
-var prev_y = 0;
-var prev_z = 0;
+var prev_accel,
+    prev_x = 0,
+    prev_y = 0,
+    prev_z = 0,
+    fastThresh = 4,// threshold to be changed on 
+    slowThresh = 2, 
+    thresh = fastThresh; 
+    var player = document.getElementById('fast');
+    player.play();
+    var socket = io.connect("/");
 
-var socket = io.connect("/"),
-  angle,
-  angleOffset = 0;
+socket.on('toggleGameState', function (i){    
+  if (i === -1){ 
+      thresh = slowThresh;
+      player = document.getElementById('slow');
+      player.play();
+  }else if (i === 1) {
+    thresh = fastThresh; 
+  } 
+});
+
+console.log(thresh); 
 
 window.ondevicemotion = function (e) {
-  var accel = e.accelerationIncludingGravity;
-  if (Math.abs(accel.x - prev_x) > 5 && Math.abs(accel.y - prev_y) > 5 || 
-      Math.abs(accel.x - prev_x) > 5 && Math.abs(accel.z - prev_z) > 5 ||
-      Math.abs(accel.y - prev_y) > 5 && Math.abs(accel.z - prev_z) > 5){
-      
-      document.body.innerHTML = "shake event"; 
+var accel = e.accelerationIncludingGravity;
+  if (Math.abs(accel.x - prev_x) > thresh && Math.abs(accel.y - prev_y) > thresh || 
+      Math.abs(accel.x - prev_x) > thresh && Math.abs(accel.z - prev_y) > thresh ||
+      Math.abs(accel.y - prev_y) > thresh && Math.abs(accel.z - prev_z) > thresh){ 
+      document.body.innerHTML = "prev_x"  + prev_x; 
+      socket.emit("death", playerID);
   }
-  prev_accel = accel;
+
+  prev_x = accel.x;
+  prev_y = accel.y; 
+  prev_z = accel.z; 
 }
+
