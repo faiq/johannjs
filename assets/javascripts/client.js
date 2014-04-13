@@ -16,11 +16,13 @@ function joinGame() {
 function DOManipsMaster() {
   isMaster = true;
   var but = document.getElementById('butt');
-  document.getElementById('room').setAttribute('type', 'hidden');
   but.innerText = "START";
 
   but.onclick = function() {
-    socket.emit('gamestart')
+    document.getElementById('username').setAttribute('type', 'hidden');
+    document.getElementById('room').setAttribute('type', 'hidden');
+    document.getElementById('butt').remove();
+    socket.emit('gamestart');
   }
 }
 
@@ -31,17 +33,11 @@ function DOManipsLave() {
 }
 
 
-/*
- * start collection of acceleromter datum
 socket.on('gamestart', function() {
-  if (isMaster) {
-    isMaster = false;
-    slave();
-  } else {
-    slave();
-  }
+  document.getElementById('username').setAttribute('type', 'hidden');
+  document.getElementById('room').setAttribute('type', 'hidden');
+  document.getElementById('butt').remove();
 });
-*/
 
 socket.on('roomStatus', function(msg) {
   if (msg == 1) {
@@ -51,7 +47,7 @@ socket.on('roomStatus', function(msg) {
   }
 });
 
-socket.on('winnerWinnerChickenDinner',function(winner){
+socket.on('winnerWinnerChickenDinner', function(winner){
   var color;
   if (name === winner) {
     color = 'green';

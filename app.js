@@ -127,6 +127,7 @@ io.sockets.on('connection', function(socket) {
     doge = findVictor(room);
     console.log(doge);
     socket.broadcast.emit('winnerWinnerChickenDinner', doge);
+    socket.emit('winnerWinnerChickenDinner', doge);
     delete activeRooms[cumbAth.roomId];
   });
 
