@@ -9,8 +9,11 @@ var socket = io.connect("/"),
 
 window.ondevicemotion = function (e) {
   var accel = e.accelerationIncludingGravity;
-  if (Math.abs(accel.x - prev_x) > 5) {
-      document.body.innerHTML = accel.x + "|" + accel.y + "|" + accel.z + "|";
+  if (Math.abs(accel.x - prev_x) > 5 && Math.abs(accel.y - prev_y) > 5 || 
+      Math.abs(accel.x - prev_x) > 5 && Math.abs(accel.z - prev_z) > 5 ||
+      Math.abs(accel.y - prev_y) > 5 && Math.abs(accel.z - prev_z) > 5){
+      
+      document.body.innerHTML = "shake event"; 
   }
   prev_accel = accel;
 }
