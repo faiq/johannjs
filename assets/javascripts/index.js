@@ -1,5 +1,4 @@
-window.ondevicemotion = function (e) {  
-    alert (e.accelerationIncludingGravity.x); 
-    alert (e.accelerationIncludingGravity.y); 
-    alert (e.accelerationIncludingGravity.z);
-} 
+window.ondevicemotion = function (e) {
+  var accel = e.accelerationIncludingGravity;
+  document.body.innerHTML = accel.x + "|" + accel.x + "|" + accel.x + "|"
+}
