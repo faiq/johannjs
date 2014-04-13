@@ -20,7 +20,7 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/', function (req, res){
-    res.sendfile( __dirname +    
+    res.sendfile( __dirname + "/assets/views/index.html");    
 });
 
 http.createServer(app).listen(app.get('port'), function(){
