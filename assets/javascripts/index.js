@@ -1,7 +1,7 @@
 window.ondevicemotion = function (e) {  
-  alert (e.accelerationIncludingGravity.x); 
-  alert (e.accelerationIncludingGravity.y); 
-  alert (e.accelerationIncludingGravity.z);
+    accelerationIncludingGravity.x; 
+  e.accelerationIncludingGravity.y; 
+e.accelerationIncludingGravity.z;
 } 
 
 var socket = io.connect("/"), 
@@ -11,8 +11,6 @@ var socket = io.connect("/"),
 window.on('shake', shakefunc, false); 
 
 function shakefunc (){
-  if (
-
-
+    console.log('shake it');
 
 }
