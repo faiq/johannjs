@@ -1,9 +1,11 @@
-  <script src='/socket.io/socket.io.js'></script>
-  <script>
+<html>
+  <head>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/javascripts/client.js"></script>
+  </head>
 
-    var socket = io.connect('/')
-    , angle
-    , angle_offset = 0
-    , iphone = navigator.userAgent.toLowerCase().indexOf("iphone");
-
-  </script>
+  <body>
+    <div id="content">foo</div>
+    <button id="butt" onclick="piss"> CALL PISS </button>
+  </body>
+</html>

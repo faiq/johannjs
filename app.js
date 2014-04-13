@@ -12,7 +12,7 @@ app.use(express.logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(express.methodOverride());
-app.use('/assets', express.static('assets'));
+app.use(express.static('assets'));
 
 // development only
 if ('development' == app.get('env')) {
@@ -23,7 +23,9 @@ app.get('/', function (req, res) {
   res.sendfile( __dirname + '/views/index.html')
 });
 
-app.listen(app.get('port'), function(e) {
+app.get('/l', function(req, res) { res.send('hi') })
+
+server.listen(app.get('port'), function(e) {
   console.log('Express server listening on port ' + app.get('port'));
 });
 
@@ -79,5 +81,22 @@ io.sockets.on('connection', function(socket) {
     }, 5000);
   })
 
-})
 
+	socket.on('newJoin', function(roomId){
+    	if (activeRooms.indexOf(roomId) == -1){
+            //new room
+            socket.join(roomId);
+            activeRooms.push(roomId);
+            socket.emit('roomStatus',1);
+            console.log("the value of roomID: "+ roomId + "the value of disconnectId: "+ disconnectId);
+        } else if (popCheck(roomId) ==0){
+            //joining a room with one other person
+            socket.join(roomId);
+            socket.emit('roomStatus', 2);
+            console.log("the value of roomID: "+ roomId + "the value of disconnectId: "+ disconnectId);
+        } else {
+            //room is full
+            socket.emit('roomStatus', 3);
+    	}
+    })
+})
