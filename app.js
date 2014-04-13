@@ -23,6 +23,10 @@ app.get('/', function (req, res) {
   res.sendfile( __dirname + '/views/index.html')
 });
 
+app.get('/a', function (req, res) {
+  res.sendfile( __dirname + '/views/audio.html')
+});
+
 
 server.listen(app.get('port'), function(e) {
   console.log('Express server listening on port ' + app.get('port'));
@@ -53,10 +57,6 @@ function findVictor(room){
 /*
  * casts to clients
  */
-function flipGameState(socket) {
-  socket.broadcast.emit('toggleGameState');
-}
-
 function Player(name) {
   this.living = true;
   this.name = name;
@@ -76,8 +76,8 @@ function Game(obj) {
     socket.broadcast.to(room).emit('toggleGameState', state *= -1);
   }
 
-  function start() {
-    setInterval(loop, 200)
+  this.start = function() {
+    setInterval(loop, 15000)
   }
 
 }
@@ -110,25 +110,31 @@ io.sockets.on('connection', function(socket) {
     }
   });
 
-  socket.on('gamestart', function() {
+  socket.on('gamestart', function(roomId) {
     socket.broadcast.emit('gamestart', 'msg');
-    setInterval(function() {
-      flipGameState(socket)
-    }, 5000);
+    activeRooms[roomId].start();
   });
 
   socket.on('death', function(cumbAth) {
     console.log('DEADTHHHHHH');
     console.log(cumbAth);
     var doge;
-    var room = activeRooms[cumbAth.roomId];
-    room.deathCount++;
-    room.players[cumbAth.username].living = false;
-    doge = findVictor(room);
-    console.log(doge);
-    socket.broadcast.emit('winnerWinnerChickenDinner', doge);
-    socket.emit('winnerWinnerChickenDinner', doge);
-    delete activeRooms[cumbAth.roomId];
+    var room;
+    if (room = activeRooms[cumbAth.roomId]) {
+      room.deathCount++;
+      room.players[cumbAth.username].living = false;
+      doge = findVictor(room);
+      if (doge) {
+        console.log('winner:', doge);
+        socket.broadcast.emit('winnerWinnerChickenDinner', doge);
+        socket.emit('winnerWinnerChickenDinner', doge);
+        delete activeRooms[cumbAth.roomId];
+      }
+    }
+  });
+
+  socket.on('test', function() {
+    socket.broadcast.emit('test');
   });
 
 
